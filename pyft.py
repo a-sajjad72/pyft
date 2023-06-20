@@ -257,7 +257,7 @@ class Server:
     A class for handling the server side of the file transfer.
 
     Args:
-        host (str): The IP address or hostname of the server. Defaults to loacl ip address.
+        host (str, optional): The IP address or hostname of the server. Defaults to loacl ip address.
         port (int, optional): The port number of the server. Defaults to 9999.
         maxClients (int, optional): The maximum number of clients that can be connected to the server. Defaults to 8.
     """

@@ -31,8 +31,8 @@ client = Client(serverHost, serverPort)
 client.start_client()
 ```
 
-- `serverHost (str)`: The IP address or hostname of the server.
-- `serverPort (int)`: The port number of the server.
+- `serverHost` (str): The IP address or hostname of the server.
+- `serverPort` (int): The port number of the server.
 
 #### Write your own Client code
 You can write your own client code by overiding the `server_response` method by inheriting the Client class. Example shown below
@@ -63,9 +63,9 @@ server = Server(host, port, maxClients)
 # Start the server
 server.start_server()
 ```
-- `host (str, optional)`: The IP address or hostname of the server. If not provided, it will use the local IP address.
-- `port (int, optional)`: The port number of the server. Defaults to 9999.
-- `maxClients (int, optional)`: The maximum number of clients that can be connected to the server. Defaults to 8.
+- `host` (str, optional): The IP address or hostname of the server. If not provided, it will use the local IP address.
+- `port` (int, optional): The port number of the server. Defaults to 9999.
+- `maxClients` (int, optional): The maximum number of clients that can be connected to the server. Defaults to 8.
 
 #### Write your own Server code
 Like Client class you can also write your own server code by overiding `client_handler` method of Server class. Example shown below.
@@ -97,8 +97,8 @@ ft = FileTransfer(connection)
 # Receive a file
 ft.recv_file(path)
 ```
-- `connection (socket)`: Socket object for the connection to send/receive data.
-- `path (str, optional)`: The path of the directory to store the received file. Defaults to the current working directory.
+- `connection`: Socket for the connection to send/receive data.
+- `path` (str, optional): The path of the directory to store the received file. Defaults to the current working directory.
 
 Also see example [here](#write-your-own-server-code)
 
@@ -116,8 +116,8 @@ ft = FileTransfer(connection)
 ft.send_file(filePath)
 ```
 
- - `connection (socket)`: Socket object for the connection to send/receive data.
- - `filePath (str)`: Path/name of the file to send.
+ - `connection`: Socket for the connection to send/receive data.
+ - `filePath` (str): Path/name of the file to send.
 
 Also see example [here](#write-your-own-client-code)
 
@@ -135,8 +135,8 @@ ft = FileTransfer(connection)
 ft.archive(name, items)
 ```
 
-- `name (str)`: Path/name to name the archived zip file.
-- `items (list)`: List of paths of the files or directories to archive.
+- `name` (str): Path/name to name the archived zip file.
+- `items` (list): List of paths of the files or directories to archive.
 
 #### Extracting Files
 You can also extract files from a zip archive using the `extract` method.
@@ -149,11 +149,11 @@ You can also extract files from a zip archive using the `extract` method.
 FileTransfer.extract(src, dest)
 ```
 
-- `src (str)`: Path of the archive to extract.
-- `dest (str, optional)`: Path to extract the archive. Defaults to the current working directory.
+- `src` (str): Path of the archive to extract.
+- `dest` (str, optional): Path to extract the archive. Defaults to the current working directory.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
-Feel free to contribute to the project by reporting issues, submitting pull requests or improving documenataion. You know the documentation is not so well that's why improvement in documentation is also greatly appreciated
+Feel free to contribute to the project by reporting [issues](https://github.com/a-sajjad72/pyft/issues), submitting [pull requests](https://github.com/a-sajjad72/pyft/pulls) or improving [documenataion](https://github.com/a-sajjad72/pyft/blob/master/documentation.md). You know the documentation is not so well that's why improvement in documentation is also greatly appreciated.
