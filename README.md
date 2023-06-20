@@ -15,7 +15,11 @@ The PyFT is a Python-based file transfer framework that enables file transfer be
 
 ## Installation
 
--  Clone the repository or download the source code.
+-  Clone the repository from the below code or download the source code from [here](https://github.com/a-sajjad72/pyft/releases/).
+```
+git clone https://github.com/a-sajjad72/pyft.git
+```
+**NOTE:** You must have installed [git](https://git-scm.com/) before using the above command.
 
 ## Usage
 ### Client
@@ -157,3 +161,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 Feel free to contribute to the project by reporting [issues](https://github.com/a-sajjad72/pyft/issues), submitting [pull requests](https://github.com/a-sajjad72/pyft/pulls) or improving [documenataion](https://github.com/a-sajjad72/pyft/blob/master/documentation.md). You know the documentation is not so well that's why improvement in documentation is also greatly appreciated.
+
+**NOTE:** Please make sure you forked the repository before making any contributions.
