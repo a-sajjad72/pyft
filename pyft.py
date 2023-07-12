@@ -2,15 +2,21 @@ import socket
 from _thread import *
 import threading
 import os, zipfile
+import json
+from pip._vendor.rich import filesize
 from pip._vendor.rich.console import Console
 from pip._vendor.rich.progress import (
     Progress,
+    Task,
     TextColumn,
     BarColumn,
     TransferSpeedColumn,
     DownloadColumn,
     TimeElapsedColumn,
-)  # for progress bar
+    TimeRemainingColumn,
+)
+from pip._vendor.rich.table import Column
+from pip._vendor.rich.text import Text  # for progress bar
 
 
 class FileTransfer:
@@ -37,13 +43,14 @@ class FileTransfer:
         """
 
         try:
-            filename, filesize = self.recv_msg().split(";")
-            filesize = int(filesize)
+            file_details = self.recv_msg()
+            file_details = json.loads(file_details)
+            filename, filesize = file_details["filename"], file_details["filesize"]
             console = Console()
             with Progress(
                 TextColumn("[progress.description]{task.description}"),
                 BarColumn(),
-                DownloadColumn(binary_units=True),
+                MyDownloadColumn(binary_units=True, precision=2),
                 TextColumn("at"),
                 TransferSpeedColumn(),
                 TextColumn("in"),
@@ -85,12 +92,12 @@ class FileTransfer:
                 filePath.rstrip("\\" if os.name == "nt" else "/")
             )
             filesize = os.path.getsize(filePath)
-            self.send_msg(";".join([filename, str(filesize)]))
+            self.send_msg(json.dumps({"filename": filename, "filesize": filesize}))
             console = Console()
             with Progress(
                 TextColumn("[progress.description]{task.description}"),
                 BarColumn(),
-                DownloadColumn(binary_units=True),
+                MyDownloadColumn(binary_units=True, precision=2),
                 TextColumn("at"),
                 TransferSpeedColumn(),
                 TextColumn("in"),
@@ -339,6 +346,52 @@ class Server:
         """
         returns the local ip address
         """
-        
+
         hostname = socket.getfqdn()
-        return socket.gethostbyname_ex(hostname)[2][1]
+        return socket.gethostbyname_ex(hostname)[2][-1]
+
+
+class MyDownloadColumn(DownloadColumn):
+    def __init__(
+        self,
+        binary_units: bool = False,
+        precision: int = 1,
+        table_column: Column | None = None,
+    ) -> None:
+        self.precision = precision
+        super().__init__(binary_units, table_column)
+
+    def render(self, task: Task) -> Text:
+        """Calculate common unit for completed and total."""
+        completed = int(task.completed)
+
+        unit_and_suffix_calculation_base = (
+            int(task.total) if task.total is not None else completed
+        )
+        if self.binary_units:
+            unit, suffix = filesize.pick_unit_and_suffix(
+                unit_and_suffix_calculation_base,
+                ["bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"],
+                1024,
+            )
+        else:
+            unit, suffix = filesize.pick_unit_and_suffix(
+                unit_and_suffix_calculation_base,
+                ["bytes", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+                1000,
+            )
+        precision = 0 if unit == 1 else self.precision
+
+        completed_ratio = completed / unit
+        completed_str = f"{completed_ratio:,.{precision}f}"
+
+        if task.total is not None:
+            total = int(task.total)
+            total_ratio = total / unit
+            total_str = f"{total_ratio:,.{precision}f}"
+        else:
+            total_str = "?"
+
+        download_status = f"{completed_str}/{total_str} {suffix}"
+        download_text = Text(download_status, style="progress.download")
+        return download_text
