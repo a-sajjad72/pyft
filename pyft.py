@@ -3,20 +3,20 @@ from _thread import *
 import threading
 import os, zipfile
 import json
-from pip._vendor.rich import filesize
-from pip._vendor.rich.console import Console
-from pip._vendor.rich.progress import (
+
+from rich import filesize
+from rich.console import Console
+from rich.progress import (
     Progress,
     Task,
     TextColumn,
     BarColumn,
     TransferSpeedColumn,
     DownloadColumn,
-    TimeElapsedColumn,
     TimeRemainingColumn,
 )
-from pip._vendor.rich.table import Column
-from pip._vendor.rich.text import Text  # for progress bar
+from rich.table import Column
+from rich.text import Text  # for progress bar
 
 
 class FileTransfer:
@@ -53,10 +53,10 @@ class FileTransfer:
                 MyDownloadColumn(binary_units=True, precision=2),
                 TextColumn("at"),
                 TransferSpeedColumn(),
-                TextColumn("in"),
-                TimeElapsedColumn(),
-                transient=True,
+                TextColumn("ETA"),
+                TimeRemainingColumn(),
             ) as progress:
+                TimeRemainingColumn.max_refresh = 1
                 console.print(filename, style="bold")
                 recv_task = progress.add_task("Receiving", total=filesize)
                 bytes_received = 0
@@ -100,10 +100,10 @@ class FileTransfer:
                 MyDownloadColumn(binary_units=True, precision=2),
                 TextColumn("at"),
                 TransferSpeedColumn(),
-                TextColumn("in"),
-                TimeElapsedColumn(),
-                transient=True,
+                TextColumn("ETA"),
+                TimeRemainingColumn(),
             ) as progress:
+                TimeRemainingColumn.max_refresh = 1
                 console.print(filename, style="bold")
                 send_task = progress.add_task("Sending", total=filesize)
                 bytes_sent = 0
