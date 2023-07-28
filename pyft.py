@@ -356,10 +356,9 @@ class MyDownloadColumn(DownloadColumn):
         self,
         binary_units: bool = False,
         precision: int = 1,
-        table_column: Column | None = None,
     ) -> None:
         self.precision = precision
-        super().__init__(binary_units, table_column)
+        super().__init__(binary_units)
 
     def render(self, task: Task) -> Text:
         """Calculate common unit for completed and total."""
